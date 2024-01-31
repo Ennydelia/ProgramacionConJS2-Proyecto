@@ -2,6 +2,83 @@
 import recipeView from './views/RecipeView';
 import * as model from './model';
 
+async function controlRecipes(){
+  try{
+     // Declara una variable id y asígnale el método window.location.hash
+    const id = window.location.hash.slice(1);
+
+    // Antes de obtener, muestra la imagen de cargando
+    recipeView.renderSpinner();
+
+
+    await model.loadRecipe(id);
+
+    /* Se hace el cambio por la vista */
+    recipeView.render(model.state.recipe);
+
+  } catch (error){
+    // alert('Error: ' + error.message);
+    recipeView.renderError(error.message);
+  }
+}
+
+// const events = ['hashchange', 'load'];
+
+// metodoForeach para obtener los eventos 
+/* events.forEach(ev => {
+  window.addEventListener(ev, () => controlRecipes(ev));
+});
+ */
+
+function init() {
+  recipeView.addHandlerRender(controlRecipes);
+}
+
+// Instancia addHandlerRender y pasa controlRecipes como parámetro
+init();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* AVANCE 2 */
+
+
+/* /* Importaciones 
+import recipeView from './views/RecipeView';
+import * as model from './model';
+
 // const recipeContainer = document.querySelector('.recipe');
 
 /* Se elimina el timeout para pasarlo a helpers */
@@ -23,7 +100,7 @@ import * as model from './model';
   </div>`;
   parentEl.innerHTML = '';
   parentEl.insertAdjacentHTML('afterbegin', markup);
-} */
+} 
 
 async function controlRecipes(){
   try{
@@ -44,12 +121,12 @@ async function controlRecipes(){
     // Mensaje de Error en caso de que la pagina sea igual a falso
     if (!resp.ok) {
       throw new Error('Error al obtener la receta');
-    } */
+    } 
 
     await model.loadRecipe(id);
     //const { recipe } = model.state;
 
-    /* Se hace el cambio por la vista */
+    /* Se hace el cambio por la vista 
     recipeView.render(model.state.recipe);
 
     /* const data = await resp.json();
@@ -160,7 +237,7 @@ async function controlRecipes(){
       recipeContainer.insertAdjacentHTML('afterbegin', markup); */
     /* } else {
       throw new Error('La estructura de los datos no es la esperada.');
-    } */
+    } 
   } catch (error){
     alert('Error: ' + error.message);
   }
@@ -176,7 +253,7 @@ const events = ['hashchange', 'load'];
 // metodoForeach para obtener los eventos 
 events.forEach(ev => {
   window.addEventListener(ev, () => controlRecipes(ev));
-});
+}); */
 
 
 

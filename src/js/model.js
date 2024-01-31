@@ -32,7 +32,8 @@ const loadRecipe = async (id) => {
       // console.log('State:', state);
     } catch (err) {
       // Envía a una alerta el error
-      console.log(`${err.message} 💥💥💥💥`);
+      // console.log(`${err.message} 💥💥💥💥`);
+      throw err;
     }
 };
 

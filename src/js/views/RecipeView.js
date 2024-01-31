@@ -4,6 +4,8 @@ import { Fraction } from 'fractional';
 class RecipeView {
     #parentElement;
     #data;
+    _errorMessage = 'We could not find that recipe. Please try another one!';
+    _successMessage = 'Recipe successfully loaded!';
   
     constructor(parentElement) {
       this.#parentElement = document.querySelector(parentElement);
@@ -13,6 +15,10 @@ class RecipeView {
       this.#data = data;
       const markup = this.#generateMarkup();
       this.#parentElement.innerHTML = markup;
+    }
+
+    addHandlerRender(handler) {
+      ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, event => handler(event)));
     }
   
     /* Se copia el HTML que tenemos en Controller JS, ya que es nuestra parte de la vista */
@@ -115,6 +121,40 @@ class RecipeView {
         </div>
       `;
       this.#parentElement.innerHTML = '';
+      this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    }
+
+    renderError(message = this._errorMessage) {
+      this.#clear();
+      
+      const markup = `
+        <div class="error">
+          <div>
+            <svg>
+              <use href="${icons}#icon-alert-triangle"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div>
+      `;
+      
+      this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    }
+
+    renderMessage(message = this._successMessage) {
+      this.#clear();
+  
+      const markup = `
+        <div class="message">
+          <div>
+            <svg>
+              <use href="${icons}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div>
+      `;
+  
       this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     }
   }
