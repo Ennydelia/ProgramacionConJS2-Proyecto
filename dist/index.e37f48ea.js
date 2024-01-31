@@ -965,7 +965,7 @@ const timeout = function (s) {
 
 showRecipe(); */ 
 
-},{"./views/RecipeView":"aFEMw","./views/searchView":"9OQAM","./views/ResultsView":"8JjiB","./model":"Y4A21","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/paginationView":"6z7bi"}],"aFEMw":[function(require,module,exports) {
+},{"./views/RecipeView":"aFEMw","./views/searchView":"9OQAM","./views/ResultsView":"8JjiB","./views/paginationView":"6z7bi","./model":"Y4A21","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aFEMw":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("../../img/icons.svg");
@@ -1569,6 +1569,63 @@ class ResultsView extends (0, _viewDefault.default) {
 }
 exports.default = new ResultsView();
 
+},{"./View":"5cUXS","../../img/icons.svg":"cMpiy","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6z7bi":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _view = require("./View");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+var _iconsSvg = require("../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class PaginationView extends (0, _viewDefault.default) {
+    _parentElement = document.querySelector(".pagination");
+    addHandlerClick(handler) {
+        this._parentElement.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--inline");
+            if (!btn) return;
+            const goToPage = +btn.dataset.goto;
+            handler(goToPage);
+        });
+    }
+    _generateMarkup() {
+        if (!this._parentElement) return "";
+        const currentPage = this._data.page;
+        const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+        // Cuando esta en la pagina uno y la consulta tiene mas paginas
+        if (currentPage === 1 && numPages > 1) return `
+            <button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
+            <span>Page ${currentPage + 1}</span>
+            <svg class="search__icon">
+                <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+            </svg>
+            </button>`;
+        // Cuando esta en la ultima pagina
+        if (currentPage === numPages && numPages > 1) return `
+            <button data-goto="${currentPage - 1}" class="btn--inline pagination__btn--prev">
+                <svg class="search__icon">
+                    <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+                </svg>
+                <span>Page ${currentPage - 1}</span>
+            </button>`;
+        // Paginas intermedias
+        if (currentPage < numPages) return `
+            <button data-goto="${currentPage - 1}" class="btn--inline pagination__btn--prev">
+                <svg class="search__icon">
+                    <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+                </svg>
+                <span>Page ${currentPage - 1}</span>
+            </button>
+            <button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
+                <span>Page ${currentPage + 1}</span>
+                <svg class="search__icon">
+                    <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+                </svg>
+            </button>`;
+        // No existe mas de una pagina
+        return "";
+    }
+}
+exports.default = new PaginationView();
+
 },{"./View":"5cUXS","../../img/icons.svg":"cMpiy","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Y4A21":[function(require,module,exports) {
 /* Importacion de la URL */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -1676,63 +1733,6 @@ const getJSON = async (url)=>{
     }
 };
 
-},{"./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6z7bi":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _view = require("./View");
-var _viewDefault = parcelHelpers.interopDefault(_view);
-var _iconsSvg = require("../../img/icons.svg");
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class PaginationView extends (0, _viewDefault.default) {
-    _parentElement = document.querySelector(".pagination");
-    addHandlerClick(handler) {
-        this._parentElement.addEventListener("click", function(e) {
-            const btn = e.target.closest(".btn--inline");
-            if (!btn) return;
-            const goToPage = +btn.dataset.goto;
-            handler(goToPage);
-        });
-    }
-    _generateMarkup() {
-        if (!this._parentElement) return "";
-        const currentPage = this._data.page;
-        const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
-        // Cuando esta en la pagina uno y la consulta tiene mas paginas
-        if (currentPage === 1 && numPages > 1) return `
-            <button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
-            <span>Page ${currentPage + 1}</span>
-            <svg class="search__icon">
-                <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
-            </svg>
-            </button>`;
-        // Cuando esta en la ultima pagina
-        if (currentPage === numPages && numPages > 1) return `
-            <button data-goto="${currentPage - 1}" class="btn--inline pagination__btn--prev">
-                <svg class="search__icon">
-                    <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
-                </svg>
-                <span>Page ${currentPage - 1}</span>
-            </button>`;
-        // Paginas intermedias
-        if (currentPage < numPages) return `
-            <button data-goto="${currentPage - 1}" class="btn--inline pagination__btn--prev">
-                <svg class="search__icon">
-                    <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
-                </svg>
-                <span>Page ${currentPage - 1}</span>
-            </button>
-            <button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
-                <span>Page ${currentPage + 1}</span>
-                <svg class="search__icon">
-                    <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
-                </svg>
-            </button>`;
-        // No existe mas de una pagina
-        return "";
-    }
-}
-exports.default = new PaginationView();
-
-},{"./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/icons.svg":"cMpiy"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3a11")
+},{"./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
