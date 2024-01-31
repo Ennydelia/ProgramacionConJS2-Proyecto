@@ -1,16 +1,19 @@
 /* Importaciones */
 import recipeView from './views/RecipeView';
+import searchView from './views/searchView';
+import resultsView from './views/ResultsView';
 import * as model from './model';
 
 async function controlRecipes(){
   try{
-     // Declara una variable id y asígnale el método window.location.hash
+     // Declaracion de variable id
     const id = window.location.hash.slice(1);
 
-    // Antes de obtener, muestra la imagen de cargando
+    // Crear una condicional, para validar si existe el ID
+    if (!id) return;
+
+    // Funcion para mostrar una imagen de que esta cargando la informacion
     recipeView.renderSpinner();
-
-
     await model.loadRecipe(id);
 
     /* Se hace el cambio por la vista */
@@ -22,20 +25,39 @@ async function controlRecipes(){
   }
 }
 
-// const events = ['hashchange', 'load'];
+async function controlSearchResults(query){
+  try{
+    // Se realiza la busqueda de lo ingresado en el portal, para obtener los resultados del mismo
+    const searchQuery = searchView.getQuery();
+    // const query = searchView.getQuery();
 
-// metodoForeach para obtener los eventos 
-/* events.forEach(ev => {
-  window.addEventListener(ev, () => controlRecipes(ev));
-});
- */
+    if (!searchQuery) return;
+    // Validacion del query si existe
+    // if (!query) return;
+
+    resultsView.renderSpinner();
+    await model.loadSearchResults(searchQuery);
+    // Se hace llamado a la funcion loadSearchResults que se encuentra en el archivo model.js
+    // await model.loadSearchResults(query);
+
+    // Invoca el método render dentro del model
+    resultsView.render(model.state.search.results);
+    // console.log(model.state.search.results);
+  } catch (err){
+    console.log(err)
+  }
+}
 
 function init() {
   recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearch(controlSearchResults);
 }
 
-// Instancia addHandlerRender y pasa controlRecipes como parámetro
+// Se pasan las instancias de la funcion Init 
 init();
+
+// Prueba de la instancia
+// controlSearchResults();
 
 
 
