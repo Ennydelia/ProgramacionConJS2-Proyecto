@@ -2,6 +2,7 @@
 import recipeView from './views/RecipeView';
 import searchView from './views/searchView';
 import resultsView from './views/ResultsView';
+import paginationView from './views/paginationView';
 import * as model from './model';
 
 async function controlRecipes(){
@@ -20,44 +21,52 @@ async function controlRecipes(){
     recipeView.render(model.state.recipe);
 
   } catch (error){
-    // alert('Error: ' + error.message);
     recipeView.renderError(error.message);
   }
 }
 
-async function controlSearchResults(query){
+async function controlSearchResults(){
   try{
     // Se realiza la busqueda de lo ingresado en el portal, para obtener los resultados del mismo
     const searchQuery = searchView.getQuery();
-    // const query = searchView.getQuery();
 
     if (!searchQuery) return;
-    // Validacion del query si existe
-    // if (!query) return;
-
+    
     resultsView.renderSpinner();
     await model.loadSearchResults(searchQuery);
-    // Se hace llamado a la funcion loadSearchResults que se encuentra en el archivo model.js
-    // await model.loadSearchResults(query);
+
 
     // Invoca el método render dentro del model
-    resultsView.render(model.state.search.results);
-    // console.log(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
+    paginationView.render(model.state.search);
   } catch (err){
     console.log(err)
   }
 }
 
+
+// Cree una nueva funcion aincronica, para obtener la pagina de manera actualizada y que la cambie en el portal
+async function controlPagination(goToPage) {
+  try {
+
+    model.getSearchResultsPage(goToPage);
+    resultsView.render(model.getSearchResultsPage());
+    paginationView.render(model.state.search);
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
 function init() {
   recipeView.addHandlerRender(controlRecipes);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
 }
 
 // Se pasan las instancias de la funcion Init 
 init();
-
-// Prueba de la instancia
-// controlSearchResults();
 
 
 

@@ -1,5 +1,5 @@
 /* Importacion de la URL */
-import { API_URL } from './config';
+import { API_URL, RES_PER_PAGE } from './config';
 import { getJSON } from './helpers';
 
 
@@ -8,6 +8,8 @@ const state = {
     search :{
       query: '', 
       results: [],
+      page: 1, 
+      resultsPerPage: RES_PER_PAGE,
     }
 };
 export { state };
@@ -40,8 +42,6 @@ const loadRecipe = async (id) => {
     }
 };
 
-export {loadRecipe, loadSearchResults };
-
 // Funcion en la cual realiza la busqueda con el query obtenido de config.js
 const loadSearchResults = async (query) => {
   try {
@@ -64,8 +64,19 @@ const loadSearchResults = async (query) => {
   }
 };
 
+const getSearchResultsPage = (page = state.search.page) => {
+  state.search.page = page;
+
+  // variables de inicio y fin de la paginas 
+  const start = (page - 1) * state.search.resultsPerPage;
+  const end = page * state.search.resultsPerPage;
+
+  return state.search.results.slice(start, end);
+};
+
 // Llamar la funcion con Pizza como ejemplo
 // loadSearchResults('pizza')
 // .then((results) => console.log('Search Results:', results))
 // .catch((error) => console.error('Error:', error));
   
+export {loadRecipe, loadSearchResults, getSearchResultsPage };
